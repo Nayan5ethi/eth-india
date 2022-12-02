@@ -43,7 +43,7 @@ export default function SecurityDashboard() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
 
-        <Box minH="100vh" bg={useColorModeValue('gray.100', 'white.900')} >
+        <Box minH="100vh"  >
             <Flex  >
                 <SidebarContent
 
@@ -87,7 +87,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
             
             borderRight="1px"
             borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-            w={{ base: 'full', md: 80 }}
+            w={{ base: 'full', md: 60 }}
             pos="fixed"
             h="full"
             {...rest}>
