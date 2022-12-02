@@ -36,7 +36,7 @@ import Logo from "../../assets/logo.png"
 
 const LinkItems = [
     { name: 'Home', icon: HouseSidingIcon, route: "/" },
-    { name: 'Scan Qr', icon:CurrencyExchangeIcon , route: "gateselect" },
+    { name: 'Rentals', icon:CurrencyExchangeIcon , route: "rentals" },
 ];
 
 export default function SecurityDashboard() {
@@ -99,7 +99,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
             <Divider />
             <Flex direction={"column"} my="5" >
             {LinkItems.map((link) => (
-                <NavItem onClose={onClose} route={link.route} key={link.name} icon={link.icon}>
+                <NavItem  onClose={onClose} route={link.route} key={link.name} icon={link.icon}>
                     {link.name}
                 </NavItem>
                 
