@@ -54,9 +54,7 @@ function App() {
                   <Route
                     path="/profile"
                     element={
-                      <AuthenticatedRoute>
                         <PropertyListing/>
-                      </AuthenticatedRoute>
                     }
                   />
                   <Route index element={<PropertyListing />} />
