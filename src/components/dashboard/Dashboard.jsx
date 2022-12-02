@@ -25,13 +25,14 @@ import {
     Img,
     color,
     background,
+    Divider,
 } from '@chakra-ui/react';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import HouseSidingIcon from '@mui/icons-material/HouseSiding';
 import { Outlet, NavLink as ReachLink, useNavigate } from 'react-router-dom';
-
+import Logo from "../../assets/logo.png"
 
 const LinkItems = [
     { name: 'Home', icon: HouseSidingIcon, route: "/" },
@@ -42,7 +43,7 @@ export default function SecurityDashboard() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
 
-        <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')} >
+        <Box minH="100vh" bg={useColorModeValue('gray.100', 'white.900')} >
             <Flex  >
                 <SidebarContent
 
@@ -80,23 +81,30 @@ export default function SecurityDashboard() {
 const SidebarContent = ({ onClose, ...rest }) => {
     return (
         <Box
+            
             transition="3s ease"
             bg={useColorModeValue('white', 'gray.900')}
+            
             borderRight="1px"
             borderRightColor={useColorModeValue('gray.200', 'gray.700')}
-            w={{ base: 'full', md: 60 }}
+            w={{ base: 'full', md: 80 }}
             pos="fixed"
             h="full"
             {...rest}>
-            <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
-            Co-Owned
-                <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
+            <Flex alignItems="center" w="100%" justifyContent={["space-evenly","center",]}>
+          <Img w={["40%","50%"]} src={Logo}>
+          </Img>
+                <CloseButton boxShadow={"base"} display={{ base: 'flex', md: 'none' }} onClick={onClose} />
             </Flex>
+            <Divider />
+            <Flex direction={"column"} my="5" >
             {LinkItems.map((link) => (
                 <NavItem onClose={onClose} route={link.route} key={link.name} icon={link.icon}>
                     {link.name}
                 </NavItem>
+                
             ))}
+            </Flex>
         </Box>
     );
 };
@@ -105,7 +113,7 @@ const NavItem = ({ icon, onClose, children, route, ...rest }) => {
     return (
         <Link
         onClick={onClose}
-    
+        my="1"
             as={ReachLink} to={route} 
             style={{
                 textDecoration:'none'
@@ -142,7 +150,6 @@ const NavItem = ({ icon, onClose, children, route, ...rest }) => {
                     />
                 )}
                 {children}
-            
         </Link>
     );
 };
