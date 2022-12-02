@@ -5,6 +5,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PropertyListing from './components/PropertyListing';
 import { ChakraProvider } from '@chakra-ui/react';
+import AddAsset from './components/form/AddAsset';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
 <Route path='/' element={<Dashboard/>}>
 
   <Route path='listing' element={<PropertyListing/>} ></Route>
+  <Route path='add' element={<AddAsset/>} ></Route>
 </Route>
 
 

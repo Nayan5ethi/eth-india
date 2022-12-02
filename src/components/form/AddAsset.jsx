@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Select as ReactSelect } from "chakra-react-select";
+import FilePicker from "chakra-ui-file-picker";
 import {
     Container,
     FormControl,
@@ -7,14 +9,14 @@ import {
     Input,
     Box,
     Button,
-    NumberInput,
-    NumberInputField,
     Flex,
-    Center,
-    Image,
+    SliderMark,
+    SliderTrack,
+    SliderFilledTrack,
+    Tooltip,
+    SliderThumb,
+    Slider
 } from "@chakra-ui/react";
-
-
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,18 +26,17 @@ import * as yup from "yup";
 
 const AddAsset = () => {
     const [submitSuccess, setSubmitSuccess] = useState(false);
+    const [sliderValue, setSliderValue] = React.useState(0)
+    const [showTooltip, setShowTooltip] = React.useState(false)
 
     useEffect(() => {
     }, []);
 
-
-
-
     let initValues = {
         name: "",
-        type: "",
+        type: null,
         count: "",
-        ownershipDocument: ""
+        ownershipDocument: null
     };
 
 
@@ -43,9 +44,9 @@ const AddAsset = () => {
         .object()
         .shape({
             name: yup.string().required(`Asset Name is required`),
-            type: yup.string().required(`Asset Type is required`),
+            type: yup.object().required(`Asset Type is required`).nullable(),
             count: yup.string().required(`Please specify the asset count`),
-            ownershipDocument: yup.string().required(`Please select the ownership document`)
+            ownershipDocument: yup.array().required(`Please select the ownership document`).nullable()
         })
         .required();
 
@@ -62,24 +63,12 @@ const AddAsset = () => {
     });
 
     const onSubmit = async (values) => {
-
+        console.log(values)
     };
 
     const onError = (error) => {
         console.log("Error:::::::", error);
     };
-
-    const [image, setImage] = useState("https://img.icons8.com/ios/100/000000/gender-neutral-user.png")
-    const [file, setFile] = useState("")
-
-    const onImageChange = (event) => {
-        if (event.target.files && event.target.files[0]) {
-          setImage(URL.createObjectURL(event.target.files[0]));
-         setFile(event.target.files[0]);
-          console.log("i am running");
-        }
-       }
-
 
 
     return (
@@ -93,18 +82,6 @@ const AddAsset = () => {
                         wrap={["wrap"]}
                         justifyContent="space-around"
                     >
-
-
-                        <Center border="1px" borderColor="black" m="1" p="2" borderRadius="20px">
-                                    <Image src={image}></Image>
-                                </Center>
-                                
-                                < label htmlFor='inputTag'>
-                                <Center>
-                        <img src='https://img.icons8.com/material-rounded/48/000000/camera--v2.png'></img>
-                        </Center>
-                        <Input required onChange={onImageChange} style={{display:'none'}} id="inputTag" accept='image/*' capture  type="file"/>
-                        </label>
                         <Flex
                             gap={'4'}
                             flexDir={["column", "column", "column", "row", "row"]}
@@ -112,60 +89,157 @@ const AddAsset = () => {
                             justifyContent="space-around"
                         >
                             <FormControl>
-                                <FormLabel htmlFor="firstName">First Name</FormLabel>
-                                <Input id="firstName" type="text" {...register("firstName")} />
-                                {errors && errors.firstName && (
+                                <FormLabel htmlFor="name">Name</FormLabel>
+                                <Input id="name" type="text" {...register("name")} />
+                                {errors && errors.name && (
                                     <FormHelperText color="red">
-                                        {errors.firstName.message && errors.firstName.message}
+                                        {errors.name.message && errors.name.message}
                                     </FormHelperText>
                                 )}
                             </FormControl>
-                            <FormControl>
-                                <FormLabel htmlFor="lasttName">Last Name</FormLabel>
-                                <Input id="lastName" type="text" {...register("lastName")} />
-                                {errors && errors.lastName && (
-                                    <FormHelperText color="red">
-                                        {errors.lastName.message && errors.lastName.message}
-                                    </FormHelperText>
+
+                            <Controller
+                                control={control}
+                                name="type"
+                                rules={{ required: "Please select a Type" }}
+                                render={({
+                                    field: { onChange, onBlur, value, name, ref },
+                                    fieldState: { error }
+                                }) => (
+                                    <FormControl>
+                                        <FormLabel htmlFor="type">Type</FormLabel>
+                                        <ReactSelect
+                                            id="type"
+                                            {...register("type")}
+                                            ref={ref}
+                                            onChange={onChange}
+                                            onBlur={onBlur}
+                                            value={value}
+                                            placeholder="Select"
+                                            closeMenuOnSelect={true}
+                                            options={[
+                                                {
+                                                    label: "Property",
+                                                    value: "Property",
+                                                },
+                                                {
+                                                    label: "Vehicles",
+                                                    value: "Vehicles",
+                                                },
+                                            ]}
+                                        />
+                                        {errors && errors.type && (
+                                            <FormHelperText color="red">
+                                                {errors.type.message && errors.type.message}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
                                 )}
-                            </FormControl>
+                            />
                         </Flex>
 
-                        {/* Number and Email */}
+
                         <Flex
                             gap={'4'}
                             flexDir={["column", "column", "column", "row", "row"]}
                             wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
                             justifyContent="space-around"
                         >
+                            <Controller
+                                control={control}
+                                name="count"
+                                rules={{ required: "Please select count" }}
+                                render={({
+                                    field: { onChange, onBlur, value, name, ref },
+                                    fieldState: { error }
+                                }) => (
                             <FormControl>
-                                <FormLabel htmlFor="email">Email address</FormLabel>
-                                <Input id="email" type="email" {...register("email")} />
-                                {errors && errors.email && (
+                                <FormLabel htmlFor="count">Count</FormLabel>
+                                <Slider
+                                    id='count'
+                                    defaultValue={0}
+                                    min={0}
+                                    max={100}
+                                    colorScheme='teal'
+                                    onChange={(v) => {
+                                        onChange(v)
+                                        setSliderValue(v)
+                                    }}
+                                    onMouseEnter={() => setShowTooltip(true)}
+                                    onMouseLeave={() => setShowTooltip(false)}
+                                >
+                                    <SliderMark value={25} mt='1' ml='-2.5' fontSize='sm'>
+                                        25
+                                    </SliderMark>
+                                    <SliderMark value={50} mt='1' ml='-2.5' fontSize='sm'>
+                                        50
+                                    </SliderMark>
+                                    <SliderMark value={75} mt='1' ml='-2.5' fontSize='sm'>
+                                        75
+                                    </SliderMark>
+                                    <SliderTrack>
+                                        <SliderFilledTrack />
+                                    </SliderTrack>
+                                    <Tooltip
+                                        hasArrow
+                                        bg='teal.500'
+                                        color='white'
+                                        placement='top'
+                                        isOpen={showTooltip}
+                                        label={`${sliderValue} parts`}
+                                    >
+                                        <SliderThumb />
+                                    </Tooltip>
+                                </Slider>
+                                {errors && errors.count && (
                                     <FormHelperText color="red">
-                                        {errors.email.message && errors.email.message}
+                                        {errors.count.message && errors.count.message}
                                     </FormHelperText>
                                 )}
                             </FormControl>
-                            <FormControl>
-                                <FormLabel htmlFor="mobileNumber">Mobile Number</FormLabel>
-                                <Controller
-                                    name={"mobileNumber"}
-                                    control={control}
-                                    render={({ field: { ref, ...restField } }) => (
-                                        <NumberInput ref={ref} {...restField} >
-                                            <NumberInputField name={restField.name} placeholder="enter mobile number" maxLength={10} minLength={10} />
-                                        </NumberInput>
-                                    )} />
-                                {errors && errors.mobileNumber && (
-                                    <FormHelperText color="red">
-                                        {errors.mobileNumber.message && errors.mobileNumber.message}
-                                    </FormHelperText>
-                                )}
-                            </FormControl>
+                            )}
+                            />
                         </Flex>
 
 
+                        <Flex
+                            gap={'4'}
+                            flexDir={["column", "column", "column", "row", "row"]}
+                            wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
+                            justifyContent="space-around"
+                        >
+
+
+                            <Controller
+                                control={control}
+                                name="ownershipDocument"
+                                rules={{ required: "Please select a Document" }}
+                                render={({
+                                    field: { onChange, onBlur, value, name, ref },
+                                    fieldState: { error }
+                                }) => (
+                                    <FormControl>
+                                        <FormLabel htmlFor="ownershipDocument">Ownership Document</FormLabel>
+                                        <FilePicker
+                                            // ref = {register("ownershipDocument")}
+                                            onFileChange={onChange}
+                                            placeholder="File"
+                                            clearButtonLabel="clear"
+                                            multipleFiles={true}
+                                            hideClearButton={false}
+                                            id="ownershipDocument"
+                                        />
+                                        {errors && errors.ownershipDocument && (
+                                            <FormHelperText color="red">
+                                                {errors.ownershipDocument.message && errors.ownershipDocument.message}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
+                                )}
+                            />
+
+
+                        </Flex>
                         <Flex
                             gap={'4'}
                             flexDir={["column", "column", "column", "row", "row"]}
@@ -174,10 +248,6 @@ const AddAsset = () => {
                         >
                             <Button type="submit" colorScheme="blue">
                                 Submit
-                            </Button>
-
-                            <Button type="button" onClick={() => navigate(-1)} colorScheme="red">
-                                Cancel
                             </Button>
                         </Flex>
                     </Flex>
