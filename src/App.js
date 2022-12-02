@@ -7,11 +7,11 @@ import { UserWalletContext } from "./context/userWalletContext";
 import { AuthenticatedRoute } from "./components/route/authenticatedRoute";
 import Dashboard from './components/dashboard/Dashboard';
 import { BrowserRouter, Route, Routes,Switch } from 'react-router-dom';
-import PropertyListing from './components/PropertyListing';
+import PropertyListing from './components/property/PropertyListing';
 import { ChakraProvider } from '@chakra-ui/react';
 import PropertyDetails from './components/property/PropertyDetails';
 import AddAsset from './components/form/AddAsset';
-function App() {
+function App() {  
   const [selectedAccount,setSelectedAccount]=useState("");
   const [isInitialized,setIsInitialized]=useState(false);
    
@@ -46,21 +46,17 @@ function App() {
   return (
     <UserWalletContext.Provider value={{ selectedAccount, setSelectedAccount }}>
       {
-        isInitialized?<ChakraProvider>
+        isInitialized?
+        <ChakraProvider>
           <BrowserRouter>
             <Routes> 
               <Route path="/" element={<AuthenticatedRoute/> } > 
-                  <Route exact path='/' element={<Dashboard/>}/> 
-                  <Route
-                    path="/profile"
-                    element={
-                        <PropertyListing/>
-                    }
-                  />
-                  <Route index element={<PropertyListing />} />
-                  <Route path='listing'  element={<PropertyListing/>} ></Route>
-                  <Route path='propertydetails'  element={<PropertyDetails/>} ></Route>
-                  <Route path='add' element={<AddAsset/>} ></Route>
+                  <Route exact path='/' element={<Dashboard/>}> 
+                    <Route index element={<PropertyListing />} />
+                    <Route path='listing'  element={<PropertyListing/>} ></Route>
+                    <Route path='propertydetails'  element={<PropertyDetails/>} ></Route>
+                    <Route path='add' element={<AddAsset/>} ></Route>
+                  </Route>
               </Route>
             </Routes> 
           </BrowserRouter>
