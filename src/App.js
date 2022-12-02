@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import PropertyListing from './components/property/PropertyListing';
 import { ChakraProvider } from '@chakra-ui/react';
 import PropertyDetails from './components/property/PropertyDetails';
+import AddAsset from './components/form/AddAsset';
 
 function App() {
   return (
@@ -13,9 +14,12 @@ function App() {
     <BrowserRouter>
     <Routes>
 <Route  path='/' element={<Dashboard/>}>
-<Route index element={<PropertyListing />} />
+  <Route index element={<PropertyListing />} />
   <Route   path='listing'  element={<PropertyListing/>} ></Route>
   <Route   path='propertydetails'  element={<PropertyDetails/>} ></Route>
+  <Route path='add' element={<AddAsset/>} ></Route>
+
+ 
 </Route>
 
 
