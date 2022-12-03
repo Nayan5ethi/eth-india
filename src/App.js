@@ -17,10 +17,16 @@ import {Typography} from "@mui/material"
 import Logo from "./assets/logo.png"
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {Img} from "@chakra-ui/react"
+<<<<<<< HEAD
 import { extendTheme } from '@chakra-ui/react'
 import CoOwnAbi from "./build-contracts/CoOwnNFT.json";
 import HouseSale from './components/marketplace/HouseSale';
 import SaleDetails from './components/marketplace/SaleDetails';
+=======
+import { extendTheme } from '@chakra-ui/react';
+import CoOwnAbi from "./build-contracts/CoOwnNFT.json";  
+
+>>>>>>> 8d925a9a6a3af7bec4f29f7209264ea92fa08e4a
 
 const themeC = extendTheme({
   fonts: {
@@ -138,6 +144,8 @@ function App() {
                     <Route path='listing'  element={<PropertyListing/>} />
                     <Route path='sale'  element={<HouseSale/>} />
                     <Route path='sale/:id'  element={<SaleDetails/>} ></Route>
+                    <Route index element={<PropertyListing Contract={CoOwnNFTContract} />} />
+                    <Route path='listing'  element={<PropertyListing Contract={CoOwnNFTContract}/>} />
                     <Route path='transfer/:id'  element={<TransferForm/>} />
                     <Route path='propertydetails'  element={<PropertyDetails/>} />
                     <Route path='add' element={<AddAsset Contract={CoOwnNFTContract}/>} />
