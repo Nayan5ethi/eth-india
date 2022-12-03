@@ -18,7 +18,6 @@ import Logo from "./assets/logo.png"
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {Img} from "@chakra-ui/react"
 import { extendTheme } from '@chakra-ui/react'
-import CoOwnAbi from "./build-contracts/CoOwnNFT.json";
 
 const themeC = extendTheme({
   fonts: {
