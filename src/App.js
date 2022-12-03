@@ -134,9 +134,9 @@ function App() {
             <Routes> 
               <Route path="/" element={<AuthenticatedRoute/> } > 
                   <Route exact path='/' element={<Dashboard/>}> 
-                    <Route index element={<PropertyListing />} />
-                    <Route path='listing'  element={<PropertyListing/>} />
-                    <Route path='sale'  element={<HouseSale/>} />
+                    <Route index element={<PropertyListing  />} />
+                    <Route path='rentals'  element={<PropertyListing />} />
+                    <Route path='sale'  element={<HouseSale sale={true}/>} />
                     <Route path='sale/:id'  element={<SaleDetails/>} ></Route>
                     <Route index element={<PropertyListing Contract={CoOwnNFTContract} />} />
                     <Route path='listing'  element={<PropertyListing Contract={CoOwnNFTContract}/>} />

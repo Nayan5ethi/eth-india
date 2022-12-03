@@ -17,11 +17,11 @@ const navigate=useNavigate();
             
             </Flex>
             <Flex flexDirection={["column","row"]} flexWrap="wrap" justifyContent={"center"} alignItems="center">
-            <Property/>
-            <Property/>
-            <Property/>
-            <Property/>
-            <Property/>
+            <Property sale={true}/>
+            <Property sale={true}/>
+            <Property sale={true}/>
+            <Property sale={true}/>
+            <Property sale={true}/>
             </Flex>
         </Box>
         </>
