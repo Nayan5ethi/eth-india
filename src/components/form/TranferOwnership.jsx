@@ -104,8 +104,8 @@ const TransferOwnership=()=>{
     return (
         <Card boxShadow="base" bgColor="white.1000" p="2">
             <Flex m="5" boxShadow={"base"} alignItems="center" backgroundColor="white" rounded="xl" p="5" justifyContent={"space-between"} w={["100%", "92%"]}>
-                <Typography variant="h4" sx={{ m: 2 }}>Transfer Properties</Typography>
-                <Button onClick={addFields} colorScheme={"blue"}>
+                <Typography variant="h4" >Transfer Properties</Typography>
+                <Button variant="contained" onClick={addFields} colorScheme={"blue"}>
                     Add Beneficiaries
                 </Button>
 
