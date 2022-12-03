@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Select as ReactSelect } from "chakra-react-select";
 import FilePicker from "chakra-ui-file-picker";
+import { Typography } from "@mui/material";
 import {
     Container,
     FormControl,
@@ -121,9 +122,11 @@ const AddAsset = ({Contract}) => {
         <>
          <Loader isVisible={loading}/>
         { !alert && 
-        <Container maxW={'full'} p="8" formSize={"18px"}>
-            <Box rounded="lg" display="flex" flexDir={["row"]} wrap={"nowrap"} w="100%" justifyContent="space-between" boxShadow="base" p="10">
-                <Heading>Please fill in Asset Details</Heading>
+        <Container maxW={'full'} p="8">
+            <Box my="6" rounded="lg" display="flex" flexDir={["row"]} wrap={"nowrap"} w="100%" justifyContent="space-between" boxShadow="base" p="10">
+                {/* <Heading fontWeight={"400"}>Please fill in Asset Details</Heading> */}
+                <Typography variant="h4" >Please fill in Asset Details</Typography> 
+
                 <Center><Img 
                 boxSize='50px'
                 objectFit='cover'

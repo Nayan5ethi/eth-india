@@ -17,7 +17,9 @@ import {Typography} from "@mui/material"
 import Logo from "./assets/logo.png"
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {Img} from "@chakra-ui/react"
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme } from '@chakra-ui/react';
+import CoOwnAbi from "./build-contracts/CoOwnNFT.json";  
+
 
 const themeC = extendTheme({
   fonts: {
@@ -131,8 +133,8 @@ function App() {
             <Routes> 
               <Route path="/" element={<AuthenticatedRoute/> } > 
                   <Route exact path='/' element={<Dashboard/>}> 
-                    <Route index element={<PropertyListing />} />
-                    <Route path='listing'  element={<PropertyListing/>} />
+                    <Route index element={<PropertyListing Contract={CoOwnNFTContract} />} />
+                    <Route path='listing'  element={<PropertyListing Contract={CoOwnNFTContract}/>} />
                     <Route path='transfer/:id'  element={<TransferForm/>} />
                     <Route path='propertydetails'  element={<PropertyDetails/>} />
                     <Route path='add' element={<AddAsset Contract={CoOwnNFTContract}/>} />
