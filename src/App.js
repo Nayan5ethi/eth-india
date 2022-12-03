@@ -20,7 +20,6 @@ import {Img} from "@chakra-ui/react"
 import { extendTheme } from '@chakra-ui/react';
 import CoOwnAbi from "./build-contracts/CoOwnNFT.json";  
 
-
 const themeC = extendTheme({
   fonts: {
     heading: `'Poppins',

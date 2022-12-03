@@ -6,26 +6,37 @@ import { Typography } from "@mui/material";
 import { useEffect,useContext,useState } from "react";
 import { UserWalletContext } from "../../context/userWalletContext";
 import web3 from 'web3';
+import Loader from "../loader/Loader";
+
 
 export default function PropertyListing({ Contract }){
     const { selectedAccount } = useContext(UserWalletContext);
-    const [data,setData]=useState();
+    const [loading,setLoading]=useState(false);
+    const [data,setData]=useState(null);
     const navigate=useNavigate();
     async function getProperties()
     {
-        const tokenIds = await Contract.methods.totalPropertiesListed(selectedAccount).call();  
-        let dataTemp=[];
-        tokenIds.map((tokenIds)=>{
-            Contract.methods.tokenURI(tokenIds).call().then((url)=>{
-                fetch(url)
-                .then(res => res.json())
-                .then(out => {  dataTemp.push(out); setData(dataTemp); console.log(dataTemp)})
-            }) 
-            .catch(err => { throw err });
-        })
+        try{
+            setLoading(true);
+            const tokenIds = await Contract.methods.totalPropertiesListed(selectedAccount).call();
+            let dataTemp = [];
+            tokenIds.map((tokenIds,idx) => {
+                Contract.methods.tokenURI(tokenIds).call().then((url) => {
+
+                    fetch(url)
+                        .then(res => res.json())
+                        .then(out => { dataTemp.push(out); setData(dataTemp);  if (idx == tokenIds.length-1){setLoading(false)} })
+                })
+                .catch(err => { throw err });
+            })
+        }
+        catch{
+            setLoading(false);
+        }
+        
  
     }
-    useEffect(()=>{
+    useEffect(()=>{ 
         getProperties();
     },[])
     return(
@@ -42,14 +53,15 @@ export default function PropertyListing({ Contract }){
                 </Button>
             
             </Flex>
-            <Flex flexDirection={["column","row"]} flexWrap="wrap" justifyContent={"center"} alignItems="center">
-            <Property/>
-            <Property/>
-            <Property/>
-            <Property/>
-            <Property/>
-            </Flex>
+            {
+                data?
+                <Flex flexDirection={["column","row"]} flexWrap="wrap" justifyContent={"center"} alignItems="center">
+                    {data.map((ele) => <Property name={ele.name} desc={ele.assetDescription} imgUrl={ele.assetImage} type={ele.type}/>)}
+                </Flex>:""
+            }
         </Box>
+        <Loader isVisible={loading} />
+
         </>
     )
 }
