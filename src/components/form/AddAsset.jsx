@@ -15,12 +15,14 @@ import {
     SliderFilledTrack,
     Tooltip,
     SliderThumb,
-    Slider
+    Slider,
+    Textarea
 } from "@chakra-ui/react";
 
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { storeFiles } from "../../web3StorageConfig";
 
 
 
@@ -37,7 +39,8 @@ const AddAsset = () => {
         type: null,
         count: "",
         ownershipDocument: null,
-        assetImage: null
+        assetImage: null,
+        assetDescription: ""
     };
 
 
@@ -47,8 +50,9 @@ const AddAsset = () => {
             name: yup.string().required(`Asset Name is required`),
             type: yup.object().required(`Asset Type is required`).nullable(),
             count: yup.string().required(`Please specify the asset count`),
-            ownershipDocument: yup.array().required(`Please select the ownership document`).nullable(),
-            assetImage: yup.array().required(`Please select an Asset Image`).nullable()
+            ownershipDocument: yup.array().required(`Please select the ownership document.`).nullable(),
+            assetImage: yup.array().required(`Please select an Asset Image.`).nullable(),
+            assetDescription: yup.string().required('Please enter some additional asset description.')
         })
         .required();
 
@@ -66,6 +70,10 @@ const AddAsset = () => {
 
     const onSubmit = async (values) => {
         console.log(values)
+        console.log(values)
+        const {cidDocument, nameDocument} = await storeFiles(values.ownershipDocument)
+
+        setSubmitSuccess(true)
     };
 
     const onError = (error) => {
@@ -76,7 +84,7 @@ const AddAsset = () => {
     return (
         <Container maxW={'full'} p="4" fontSize={'18px'}>
             <Box rounded="lg" boxShadow="base" p="4">
-                {!submitSuccess && <form onSubmit={handleSubmit(onSubmit, onError)}>
+                <form onSubmit={handleSubmit(onSubmit, onError)}>
                     <Flex
                         gap={'4'}
                         flexDir={["column"]}
@@ -92,7 +100,7 @@ const AddAsset = () => {
                         >
                             <FormControl>
                                 <FormLabel htmlFor="name">Name</FormLabel>
-                                <Input id="name" type="text" {...register("name")} />
+                                <Input id="name" type="text" {...register("name")} placeholder="Name" />
                                 {errors && errors.name && (
                                     <FormHelperText color="red">
                                         {errors.name.message && errors.name.message}
@@ -156,7 +164,7 @@ const AddAsset = () => {
                                     fieldState: { error }
                                 }) => (
                             <FormControl>
-                                <FormLabel htmlFor="count">Count</FormLabel>
+                                <FormLabel htmlFor="count">Fragments</FormLabel>
                                 <Slider
                                     id='count'
                                     defaultValue={0}
@@ -170,6 +178,9 @@ const AddAsset = () => {
                                     onMouseEnter={() => setShowTooltip(true)}
                                     onMouseLeave={() => setShowTooltip(false)}
                                 >
+                                    <SliderMark value={0} mt='1' ml='-2.5' fontSize='sm'>
+                                        0
+                                    </SliderMark>
                                     <SliderMark value={25} mt='1' ml='-2.5' fontSize='sm'>
                                         25
                                     </SliderMark>
@@ -178,6 +189,9 @@ const AddAsset = () => {
                                     </SliderMark>
                                     <SliderMark value={75} mt='1' ml='-2.5' fontSize='sm'>
                                         75
+                                    </SliderMark>
+                                    <SliderMark value={100} mt='1' ml='-2.5' fontSize='sm'>
+                                        100
                                     </SliderMark>
                                     <SliderTrack>
                                         <SliderFilledTrack />
@@ -210,8 +224,6 @@ const AddAsset = () => {
                             wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
                             justifyContent="space-around"
                         >
-
-
                             <Controller
                                 control={control}
                                 name="ownershipDocument"
@@ -253,8 +265,9 @@ const AddAsset = () => {
                                         <FilePicker
                                             // ref = {register("assetImage")}
                                             onFileChange={onChange}
-                                            placeholder="File"
+                                            placeholder="Image"
                                             clearButtonLabel="clear"
+                                            accept="image/gif, image/jpeg, image/png"
                                             multipleFiles={true}
                                             hideClearButton={false}
                                             id="assetImage"
@@ -276,13 +289,40 @@ const AddAsset = () => {
                             wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
                             justifyContent="space-around"
                         >
+                            <FormControl>
+                                <FormLabel htmlFor="name">Asset Description</FormLabel>
+                                <Textarea
+                                    id='assetDescription'
+                                    placeholder='Add asset description'
+                                    size='sm'
+                                    {...register("assetDescription")}
+                            />
+                                {errors && errors.assetDescription && (
+                                    <FormHelperText color="red">
+                                        {errors.assetDescription.message && errors.assetDescription.message}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
+                        </Flex>
+                        <Flex
+                            gap={'4'}
+                            flexDir={["column", "column", "column", "row", "row"]}
+                            wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
+                            justifyContent="space-around"
+                        >
                             <Button type="submit" colorScheme="blue">
                                 Submit
                             </Button>
                         </Flex>
+                        {submitSuccess && 
+                        <FormControl>
+                            <FormHelperText color="green">
+                                Successfully Submitted
+                            </FormHelperText>
+                        </FormControl>}
                     </Flex>
 
-                </form>}
+                </form>
 
             </Box>
         </Container>
