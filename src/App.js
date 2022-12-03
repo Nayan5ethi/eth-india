@@ -11,7 +11,7 @@ import PropertyListing from './components/property/PropertyListing';
 import { ChakraProvider } from '@chakra-ui/react';
 import PropertyDetails from './components/property/PropertyDetails';
 import AddAsset from './components/form/AddAsset';
-import CoOwnAbi from "./CoOwnNFT.json";
+import CoOwnAbi from "./build-contracts/CoOwnNFT.json";
 
 
 function App() {  
@@ -49,7 +49,7 @@ function App() {
 
   const CoOwnNFTContract = new web3.eth.Contract(
 		CoOwnAbi,
-		'0xC4E83A8aC9152c75D929BC3120679d3f26bAe7E8'
+		'0x1e6BC221E6B9EB3D2A6d12deAB9Efd278bdF5Fb9'
 	);
 
   

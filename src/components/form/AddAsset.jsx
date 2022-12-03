@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Select as ReactSelect } from "chakra-react-select";
 import FilePicker from "chakra-ui-file-picker";
 import {
@@ -19,24 +19,34 @@ import {
     Textarea,
     Heading,
     Img,
-    Center
+    Center,
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription
 } from "@chakra-ui/react";
 
+import GridViewIcon from '@mui/icons-material/GridView';
+import AddIcon from '@mui/icons-material/Add';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { storeFiles } from "../../web3StorageConfig";
-import assetLogo from "../../assets/assetLogo.png"
+import assetLogo from "../../assets/assetLogo.png";
+import { UserWalletContext } from "../../context/userWalletContext";
+import Loader from "../loader/Loader";
+import { Link } from "react-router-dom";
 
 
 
 const AddAsset = ({Contract}) => {
+    const [loading, setLoading] = useState(false);
+    const [response,setResponse]=useState("error")
+    const [alert, setAlert] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
-    const [sliderValue, setSliderValue] = React.useState(0)
-    const [showTooltip, setShowTooltip] = React.useState(false)
-
-    useEffect(() => {
-    }, []);
+    const [sliderValue, setSliderValue] = React.useState(0);
+    const [showTooltip, setShowTooltip] = React.useState(false);
+    const { selectedAccount } = useContext(UserWalletContext);
 
     let initValues = {
         name: "",
@@ -73,14 +83,36 @@ const AddAsset = ({Contract}) => {
     });
 
     const onSubmit = async (values) => {
-        
-        console.log(values)
-        console.log(values)
-        const document = await storeFiles(values.ownershipDocument)
-        const symbol = await storeFiles(values.assetImage)
-        const res = await Contract.methods.addProperty(values.name, symbol.cid, document.cid, 1633, values.count).call()
-        console.log(res)
-        setSubmitSuccess(true)
+       try{
+            setLoading(true)
+            console.log(values)
+            console.log(values)
+            
+            const document = await storeFiles(values.ownershipDocument)
+            const symbol = await storeFiles(values.assetImage)
+            console.log(values.name, symbol.cid, document.cid, 1633, values.count)
+            console.log(selectedAccount)
+            const res = await Contract.methods
+                .addProperty("NAYAN", "ETH", "ETH", 1223, 12)
+                .send({ 
+                    from: selectedAccount,
+                    // maxFeePerGas: 35000000000,
+                    // maxPriorityFeePerGas: 35000000000, 
+                });
+            console.log(res)
+            setSubmitSuccess(true)
+            setResponse("success")
+        }   
+        catch(err) {
+            console.log(err)
+            console.log("returns errrorr yessssssssssssss")
+            setResponse("error")
+        }
+        finally{
+            console.log("finally block running")
+            setLoading(false);
+            setAlert(true)
+        }
     };
 
     const onError = (error) => {
@@ -90,6 +122,9 @@ const AddAsset = ({Contract}) => {
     
 
     return (
+        <>
+         <Loader isVisible={loading}/>
+        {!alert && 
         <Container maxW={'full'} p="8">
             <Box rounded="lg" display="flex" flexDir={["row"]} wrap={"nowrap"} w="100%" justifyContent="space-between" boxShadow="base" p="10">
                 <Heading>Please fill in Asset Details</Heading>
@@ -341,11 +376,53 @@ const AddAsset = ({Contract}) => {
                             </FormHelperText>
                         </FormControl>}
                     </Flex>
-
                 </form>
 
             </Box>
         </Container>
+}
+
+{alert && 
+    <Flex mt="4" flexDir={"column"}>
+
+        <Flex pb="4" justifyContent={"space-evenly"} alignItems="center" w={"100%"}>
+            <Button
+                
+                as={Link}
+                to="/"
+                size='sm' leftIcon={<GridViewIcon />} colorScheme='blue' variant='solid'>
+                Return to Dashboard
+            </Button>
+            <Button 
+            onClick={setAlert(false)}
+            size='sm' 
+            as={Link}
+            to="/add"
+
+            leftIcon={<AddIcon />} colorScheme={response==="success"?"blue":"red"} variant='solid'>
+                {response==="success"?"Add more assets":"Try again"}
+            </Button>
+        </Flex>
+
+   
+        <Alert
+            status={response==="success"?"success":"error"}
+            variant='subtle'
+            flexDirection='column'
+            alignItems='center'
+            justifyContent='center'
+            textAlign='center'
+            height='200px'
+        >
+            <AlertIcon boxSize='40px' mr={0} />
+            <AlertTitle mt={4} mb={1} fontSize='lg'>
+            {response==="success"?"Successfully Submitted":"Failed to Add Asset. Please try again."}
+            </AlertTitle>
+    
+        </Alert>
+    </Flex>
+}
+        </>
     );
 };
 

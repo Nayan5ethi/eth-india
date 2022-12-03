@@ -16,6 +16,7 @@
     "chakra-react-select": "^4.4.1",
     "chakra-ui-file-picker": "^0.3.0",
     "framer-motion": "^7.6.18",
+    "lottie-web": "^5.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.40.0",
