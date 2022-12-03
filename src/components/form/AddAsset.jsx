@@ -92,7 +92,7 @@ const AddAsset = ({Contract}) => {
         try{
             const document = await storeFiles(values.ownershipDocument)
             const assetImg = await storeFiles(values.assetImage)
-            const metadata = {name: values.name, type:values.type.value, fragments: values.count, ownershipDocument:`https://w3s.link/ipfs/${document.cid}/${document.name}`, assetImage:`https://w3s.link/ipfs/${assetImg.cid}/${assetImg.name}` , assetDescription:values.assetDescription}
+            const metadata = {name: values.name, type:values.type.value, fragments: values.count, ownershipDocument:`https://w3s.link/ipfs/${document.cid}/${document.name}`, assetImage:`https://w3s.link/ipfs/${assetImg.cid}/${assetImg.name}` , assetPrice:values.price, assetDescription:values.assetDescription}
             const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' })
             const files = [
                 new File([blob], '0.json')
