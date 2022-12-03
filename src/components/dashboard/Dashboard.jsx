@@ -39,9 +39,11 @@ import { Outlet, NavLink as ReachLink, useNavigate } from 'react-router-dom';
 import Logo from "../../assets/logo.png"
 import Metamask from "../../assets/metamask.svg"
 import { UserWalletContext } from '../../context/userWalletContext';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 const LinkItems = [
     { name: 'Home', icon: HouseSidingIcon, route: "/" },
     { name: 'Rentals', icon:CurrencyExchangeIcon , route: "rentals" },
+    { name: 'Sale', icon:AttachMoneyIcon , route: "sale" },
 ];
 
 
