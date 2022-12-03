@@ -91,13 +91,7 @@ const AddAsset = ({Contract}) => {
             const symbol = await storeFiles(values.assetImage)
             console.log(values.name, symbol.cid, document.cid, 1633, values.count)
             console.log(selectedAccount)
-            const res = await Contract.methods
-                .addProperty("NAYAN", "ETH", "ETH", 1223, 12)
-                .send({ 
-                    from: selectedAccount,
-                    // maxFeePerGas: 35000000000,
-                    // maxPriorityFeePerGas: 35000000000, 
-                });
+            const res = await Contract.methods.addProperty(values.name, symbol.cid, document.cid, 10020202, values.count).send({ from: selectedAccount });
             console.log(res)
             setSubmitSuccess(true)
             setResponse("success")
@@ -123,7 +117,7 @@ const AddAsset = ({Contract}) => {
     return (
         <>
          <Loader isVisible={loading}/>
-        {!alert && 
+        { !alert && 
         <Container maxW={'full'} p="8">
             <Box rounded="lg" display="flex" flexDir={["row"]} wrap={"nowrap"} w="100%" justifyContent="space-between" boxShadow="base" p="10">
                 <Heading>Please fill in Asset Details</Heading>
@@ -365,7 +359,7 @@ const AddAsset = ({Contract}) => {
                             justifyContent="space-around"
                         >
                             <Button type="submit" colorScheme="blue">
-                                Submit
+                                Create Asset
                             </Button>
                         </Flex>
                         {submitSuccess && 
@@ -381,7 +375,7 @@ const AddAsset = ({Contract}) => {
         </Container>
 }
 
-{alert && 
+{ alert && 
     <Flex mt="4" flexDir={"column"}>
 
         <Flex pb="4" justifyContent={"space-evenly"} alignItems="center" w={"100%"}>
@@ -418,7 +412,7 @@ const AddAsset = ({Contract}) => {
     
         </Alert>
     </Flex>
-}
+}   
         </>
     );
 };
