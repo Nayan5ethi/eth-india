@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useContext, useState } from 'react';
 
 import {
     IconButton,
@@ -26,6 +26,10 @@ import {
     color,
     background,
     Divider,
+    Tooltip,
+    Alert,
+    AlertIcon,
+    useToast,
 } from '@chakra-ui/react';
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -33,13 +37,16 @@ import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import HouseSidingIcon from '@mui/icons-material/HouseSiding';
 import { Outlet, NavLink as ReachLink, useNavigate } from 'react-router-dom';
 import Logo from "../../assets/logo.png"
-
+import Metamask from "../../assets/metamask.svg"
+import { UserWalletContext } from '../../context/userWalletContext';
 const LinkItems = [
     { name: 'Home', icon: HouseSidingIcon, route: "/" },
     { name: 'Rentals', icon:CurrencyExchangeIcon , route: "rentals" },
 ];
 
+
 export default function SecurityDashboard() {
+    
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
 
@@ -156,9 +163,14 @@ const NavItem = ({ icon, onClose, children, route, ...rest }) => {
 
 
 const MobileNav = ({ onOpen, ...rest }) => {
+    const { selectedAccount } = useContext(UserWalletContext);
+    const [alert,setAlert]=useState(false)
     let imagesrc=sessionStorage.getItem("image")
     const navigate = useNavigate();
+    const toast = useToast()
     return (
+        <>
+
         <Flex
             ml={{ base: 0, md: 0 }}
             px={{ base: 4, md: 4 }}
@@ -184,31 +196,51 @@ const MobileNav = ({ onOpen, ...rest }) => {
                 <Flex alignItems={'center'}>
                     <Menu>
                         <MenuButton
+                        p="4"
+                        rounded={"20px"}
+                            bg={"blue.500"}
                             py={2}
                             transition="all 0.3s"
                             _focus={{ boxShadow: 'none' }}>
                             <HStack>
                                 <Avatar
                                     size={'sm'}
-                                    src={imagesrc?.toString()}
+                                    src={Metamask}
                                 />
-                                <VStack
-                                    display={{ base: 'none', md: 'flex' }}
-                                    alignItems="flex-start"
-                                    spacing="1px"
-                                    ml="2">
-                                    
-                                    <Text fontSize="sm" color="gray.600">
-                                        Wallet
-                                    </Text>
-                                </VStack>
+                            
                            
                             </HStack>
                         </MenuButton>
                         <MenuList
                             bg={useColorModeValue('white', 'gray.900')}
                             borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                            <MenuItem  onClick={()=>{
+                            
+                            <MenuItem 
+               onClick={() => {
+                
+                navigator.clipboard.writeText(selectedAccount)
+                toast({
+                              position: 'bottom-right',
+                    title: 'Copied .',
+                    description: "Copied to your clipboard.",
+                    status: 'success'
+                    ,
+                    duration: 5000,
+                    isClosable: true,
+                  })
+           
+            }}
+                
+                >
+  <Tooltip label={selectedAccount}>
+    <Text>
+                                    {selectedAccount.substring(0,20)}...
+                                    </Text>
+                                    </Tooltip>
+                                    
+                                    </MenuItem>
+                                    <MenuDivider/>
+                                    <MenuItem  onClick={()=>{
                   navigate("profile")
                 }}>Profile</MenuItem>
 
@@ -224,5 +256,6 @@ const MobileNav = ({ onOpen, ...rest }) => {
                 </Flex>
             </HStack>
         </Flex>
+        </>
     );
 };

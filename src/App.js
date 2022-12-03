@@ -54,8 +54,10 @@ function App() {
                   <Route exact path='/' element={<Dashboard/>}> 
                     <Route index element={<PropertyListing />} />
                     <Route path='listing'  element={<PropertyListing/>} ></Route>
+
                     <Route path='propertydetails'  element={<PropertyDetails/>} ></Route>
                     <Route path='add' element={<AddAsset/>} ></Route>
+                    <Route path='rentals'  element={<PropertyListing/>} ></Route>
                   </Route>
               </Route>
             </Routes> 
