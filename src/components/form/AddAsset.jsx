@@ -16,13 +16,18 @@ import {
     Tooltip,
     SliderThumb,
     Slider,
-    Textarea
+    Textarea,
+    Heading,
+    Img,
+    Center
 } from "@chakra-ui/react";
 
+import CoOwnNFTContract from "./../../App"
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { storeFiles } from "../../web3StorageConfig";
+import assetLogo from "../../assets/assetLogo.png"
 
 
 
@@ -69,10 +74,11 @@ const AddAsset = () => {
     });
 
     const onSubmit = async (values) => {
+        
         console.log(values)
         console.log(values)
         const {cidDocument, nameDocument} = await storeFiles(values.ownershipDocument)
-
+        const res = await CoOwnNFTContract.methods.addProperty().call()
         setSubmitSuccess(true)
     };
 
@@ -80,9 +86,18 @@ const AddAsset = () => {
         console.log("Error:::::::", error);
     };
 
+    
 
     return (
-        <Container maxW={'full'} p="4" fontSize={'18px'}>
+        <Container maxW={'full'} p="8">
+            <Box rounded="lg" display="flex" flexDir={["row"]} wrap={"nowrap"} w="100%" justifyContent="space-between" boxShadow="base" p="10">
+                <Heading>Please fill in Asset Details</Heading>
+                <Center><Img 
+                boxSize='50px'
+                objectFit='cover'
+                src={assetLogo}/>
+                </Center>
+            </Box>
             <Box rounded="lg" boxShadow="base" p="10">
                 <form onSubmit={handleSubmit(onSubmit, onError)}>
                     <Flex
@@ -93,13 +108,13 @@ const AddAsset = () => {
                         justifyContent="space-around"
                     >
                         <Flex
-                            gap={'4'}
+                            gap={'8'}
                             flexDir={["column", "column", "column", "row", "row"]}
                             wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
                             justifyContent="space-around"
                         >
                             <FormControl>
-                                <FormLabel htmlFor="name">Name</FormLabel>
+                                <FormLabel fontWeight={"medium"} fontSize={"1.3rem"} htmlFor="name">Name</FormLabel>
                                 <Input id="name" type="text" {...register("name")} placeholder="Name" />
                                 {errors && errors.name && (
                                     <FormHelperText color="red">
@@ -117,7 +132,7 @@ const AddAsset = () => {
                                     fieldState: { error }
                                 }) => (
                                     <FormControl>
-                                        <FormLabel htmlFor="type">Type</FormLabel>
+                                        <FormLabel fontWeight={"medium"} fontSize={"1.2rem"} htmlFor="type">Type</FormLabel>
                                         <ReactSelect
                                             id="type"
                                             {...register("type")}
@@ -149,77 +164,11 @@ const AddAsset = () => {
                         </Flex>
 
 
-                        <Flex
-                            gap={'4'}
-                            flexDir={["column", "column", "column", "row", "row"]}
-                            wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
-                            justifyContent="space-around"
-                        >
-                            <Controller
-                                control={control}
-                                name="count"
-                                rules={{ required: "Please select count" }}
-                                render={({
-                                    field: { onChange, onBlur, value, name, ref },
-                                    fieldState: { error }
-                                }) => (
-                            <FormControl>
-                                <FormLabel htmlFor="count">Fragments</FormLabel>
-                                <Slider
-                                    id='count'
-                                    defaultValue={0}
-                                    min={0}
-                                    max={100}
-                                    colorScheme='teal'
-                                    onChange={(v) => {
-                                        onChange(v)
-                                        setSliderValue(v)
-                                    }}
-                                    onMouseEnter={() => setShowTooltip(true)}
-                                    onMouseLeave={() => setShowTooltip(false)}
-                                >
-                                    <SliderMark value={0} mt='1' ml='-2.5' fontSize='sm'>
-                                        0
-                                    </SliderMark>
-                                    <SliderMark value={25} mt='1' ml='-2.5' fontSize='sm'>
-                                        25
-                                    </SliderMark>
-                                    <SliderMark value={50} mt='1' ml='-2.5' fontSize='sm'>
-                                        50
-                                    </SliderMark>
-                                    <SliderMark value={75} mt='1' ml='-2.5' fontSize='sm'>
-                                        75
-                                    </SliderMark>
-                                    <SliderMark value={100} mt='1' ml='-2.5' fontSize='sm'>
-                                        100
-                                    </SliderMark>
-                                    <SliderTrack>
-                                        <SliderFilledTrack />
-                                    </SliderTrack>
-                                    <Tooltip
-                                        hasArrow
-                                        bg='teal.500'
-                                        color='white'
-                                        placement='top'
-                                        isOpen={showTooltip}
-                                        label={`${sliderValue} parts`}
-                                    >
-                                        <SliderThumb />
-                                    </Tooltip>
-                                </Slider>
-                                {errors && errors.count && (
-                                    <FormHelperText color="red">
-                                        {errors.count.message && errors.count.message}
-                                    </FormHelperText>
-                                )}
-                            </FormControl>
-                            )}
-                            />
-                        </Flex>
+                        
 
 
                         <Flex
-                            gap={'4'}
+                            gap={'8'}
                             flexDir={["column", "column", "column", "row", "row"]}
                             wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
                             justifyContent="space-around"
@@ -233,7 +182,7 @@ const AddAsset = () => {
                                     fieldState: { error }
                                 }) => (
                                     <FormControl>
-                                        <FormLabel htmlFor="ownershipDocument">Ownership Document</FormLabel>
+                                        <FormLabel fontWeight={"medium"} fontSize={"1.2rem"} htmlFor="ownershipDocument">Ownership Document</FormLabel>
                                         <FilePicker
                                             // ref = {register("ownershipDocument")}
                                             onFileChange={onChange}
@@ -261,7 +210,7 @@ const AddAsset = () => {
                                     fieldState: { error }
                                 }) => (
                                     <FormControl>
-                                        <FormLabel htmlFor="assetImage">Asset Image</FormLabel>
+                                        <FormLabel fontWeight={"medium"} fontSize={"1.2rem"} htmlFor="assetImage">Asset Image</FormLabel>
                                         <FilePicker
                                             // ref = {register("assetImage")}
                                             onFileChange={onChange}
@@ -283,14 +232,83 @@ const AddAsset = () => {
 
 
                         </Flex>
+
                         <Flex
-                            gap={'4'}
+                            gap={'8'}
+                            flexDir={["column", "column", "column", "row", "row"]}
+                            wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
+                            justifyContent="space-around"
+                        >
+                            <Controller
+                                control={control}
+                                name="count"
+                                rules={{ required: "Please select count" }}
+                                render={({
+                                    field: { onChange, onBlur, value, name, ref },
+                                    fieldState: { error }
+                                }) => (
+                            <FormControl>
+                                <FormLabel fontWeight={"medium"} fontSize={"1.2rem"} htmlFor="count">Fragments</FormLabel>
+                                <Slider
+                                    id='count'
+                                    defaultValue={0}
+                                    min={0}
+                                    max={100}
+                                    colorScheme='blue'
+                                    onChange={(v) => {
+                                        onChange(v)
+                                        setSliderValue(v)
+                                    }}
+                                    onMouseEnter={() => setShowTooltip(true)}
+                                    onMouseLeave={() => setShowTooltip(false)}
+                                >
+                                    <SliderMark value={0} mt='1' ml='-2.5' fontSize='sm'>
+                                        0
+                                    </SliderMark>
+                                    <SliderMark value={25} mt='1' ml='-2.5' fontSize='sm'>
+                                        25
+                                    </SliderMark>
+                                    <SliderMark value={50} mt='1' ml='-2.5' fontSize='sm'>
+                                        50
+                                    </SliderMark>
+                                    <SliderMark value={75} mt='1' ml='-2.5' fontSize='sm'>
+                                        75
+                                    </SliderMark>
+                                    <SliderMark value={100} mt='1' ml='-2.5' fontSize='sm'>
+                                        100
+                                    </SliderMark>
+                                    <SliderTrack>
+                                        <SliderFilledTrack />
+                                    </SliderTrack>
+                                    <Tooltip
+                                        hasArrow
+                                        bg='blue.500'
+                                        color='white'
+                                        placement='top'
+                                        isOpen={showTooltip}
+                                        label={`${sliderValue} parts`}
+                                    >
+                                        <SliderThumb />
+                                    </Tooltip>
+                                </Slider>
+                                {errors && errors.count && (
+                                    <FormHelperText color="red">
+                                        {errors.count.message && errors.count.message}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
+                            )}
+                            />
+                        </Flex>
+
+                        <Flex
+                            gap={'8'}
                             flexDir={["column", "column", "column", "row", "row"]}
                             wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
                             justifyContent="space-around"
                         >
                             <FormControl>
-                                <FormLabel htmlFor="name">Asset Description</FormLabel>
+                                <FormLabel fontWeight={"medium"} fontSize={"1.2rem"} htmlFor="name">Asset Description</FormLabel>
                                 <Textarea
                                     id='assetDescription'
                                     placeholder='Add asset description'
@@ -304,8 +322,9 @@ const AddAsset = () => {
                                 )}
                             </FormControl>
                         </Flex>
+                        
                         <Flex
-                            gap={'4'}
+                            gap={'8'}
                             flexDir={["column", "column", "column", "row", "row"]}
                             wrap={["wrap", "wrap", "wrap", "nowrap", "nowrap"]}
                             justifyContent="space-around"
