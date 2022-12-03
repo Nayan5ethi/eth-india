@@ -17,14 +17,12 @@ export default function PropertyListing({ Contract }){
         let dataTemp=[];
         tokenIds.map((tokenIds)=>{
             Contract.methods.tokenURI(tokenIds).call().then((url)=>{
-                console.log("url",url)
                 fetch(url)
                 .then(res => res.json())
-                .then(out => dataTemp.push(out))
+                .then(out => {  dataTemp.push(out); setData(dataTemp); console.log(dataTemp)})
             }) 
             .catch(err => { throw err });
         })
-        console.log(dataTemp)        
  
     }
     useEffect(()=>{
