@@ -83,10 +83,10 @@ const AddAsset = () => {
 
     return (
         <Container maxW={'full'} p="4" fontSize={'18px'}>
-            <Box rounded="lg" boxShadow="base" p="4">
+            <Box rounded="lg" boxShadow="base" p="10">
                 <form onSubmit={handleSubmit(onSubmit, onError)}>
                     <Flex
-                        gap={'4'}
+                        gap={'8'}
                         flexDir={["column"]}
                         // align={["center"]}
                         wrap={["wrap"]}
