@@ -56,7 +56,7 @@ export default function PropertyListing({ Contract }){
             {
                 data?
                 <Flex flexDirection={["column","row"]} flexWrap="wrap" justifyContent={"center"} alignItems="center">
-                    {data.map((ele) => <Property name={ele.name} desc={ele.assetDescription} imgUrl={ele.assetImage} type={ele.type}/>)}
+                    {data.map((ele) => <Property name={ele.name} desc={ele.assetDescription} imgUrl={ele.assetImage} type={ele.type} sale={false}/>)}
                 </Flex>:""
             }
         </Box>
