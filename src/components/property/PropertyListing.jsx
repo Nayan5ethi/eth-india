@@ -2,6 +2,7 @@
 import { Box, Button,Flex, Heading } from "@chakra-ui/react";
 import Property from "./Property";
 import { Navigate, useNavigate } from "react-router-dom";
+import { Typography } from "@mui/material";
 export default function PropertyListing(){
 const navigate=useNavigate();
 
