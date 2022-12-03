@@ -136,7 +136,7 @@ const NavItem = ({ icon, onClose, children, route, ...rest }) => {
                 _activeLink={{
                     backgroundColor:"cyan.300",
                     color:"black",
-                    fontWeight:"900"
+                    fontWeight:"500"
                 }}
                 borderRadius="lg"
                 role="group"

@@ -1,4 +1,4 @@
-import React,{Fragment} from 'react'; 
+import React from 'react'; 
 import { useState,useContext,useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -18,6 +18,16 @@ import {Typography} from "@mui/material"
 import Logo from "./assets/logo.png"
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {Img} from "@chakra-ui/react"
+import { extendTheme } from '@chakra-ui/react'
+
+const themeC = extendTheme({
+  fonts: {
+    heading: `'Poppins',
+        'sans-serif'`,
+    body: `'Poppins',
+        'sans-serif'`,
+  },
+})
 const theme = createTheme({
     transitions: {
       duration: {
@@ -113,20 +123,20 @@ function App() {
     }
   }
   return (
-            <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
     <UserWalletContext.Provider value={{ selectedAccount, setSelectedAccount }}>
       {
         isInitialized?
-        <ChakraProvider>
+        <ChakraProvider theme={themeC}>
           <BrowserRouter>
             <Routes> 
               <Route path="/" element={<AuthenticatedRoute/> } > 
                   <Route exact path='/' element={<Dashboard/>}> 
                     <Route index element={<PropertyListing />} />
-                    <Route path='listing'  element={<PropertyListing/>} ></Route>
-                    <Route path='propertydetails'  element={<PropertyDetails/>} ></Route>
-                    <Route path='add' element={<AddAsset Contract = {CoOwnNFTContract}/>} ></Route>
-                    <Route path='rentals'  element={<PropertyListing/>} ></Route>
+                    <Route path='listing'  element={<PropertyListing/>} />
+                    <Route path='transfer/:id'  element={<TransferForm/>} />
+                    <Route path='propertydetails'  element={<PropertyDetails/>} />
+                    <Route path='add' element={<AddAsset/>} />
                   </Route>
               </Route>
             </Routes> 
