@@ -11,17 +11,20 @@ import PropertyListing from './components/property/PropertyListing';
 import { ChakraProvider } from '@chakra-ui/react';
 import PropertyDetails from './components/property/PropertyDetails';
 import AddAsset from './components/form/AddAsset';
+import CoOwnAbi from "./CoOwnNFT.json";
+
+
 function App() {  
   const [selectedAccount,setSelectedAccount]=useState("");
   const [isInitialized,setIsInitialized]=useState(false);
-   
+   let provider = window.ethereum;
+    const web3 = new Web3(provider);
   useEffect(()=>{
     if(!window.ethereum)
     {
       console.log("metamask not present");
     }
-    let provider = window.ethereum;
-    const web3 = new Web3(provider);
+   
 
     if (typeof provider !== 'undefined') {
       provider
@@ -43,6 +46,13 @@ function App() {
       });
     }
   },[])
+
+  const CoOwnNFTContract = new web3.eth.Contract(
+		CoOwnAbi,
+		'0xC4E83A8aC9152c75D929BC3120679d3f26bAe7E8'
+	);
+
+  
   return (
     <UserWalletContext.Provider value={{ selectedAccount, setSelectedAccount }}>
       {
@@ -55,7 +65,7 @@ function App() {
                     <Route index element={<PropertyListing />} />
                     <Route path='listing'  element={<PropertyListing/>} ></Route>
                     <Route path='propertydetails'  element={<PropertyDetails/>} ></Route>
-                    <Route path='add' element={<AddAsset/>} ></Route>
+                    <Route path='add' element={<AddAsset Contract = {CoOwnNFTContract}/>} ></Route>
                     <Route path='rentals'  element={<PropertyListing/>} ></Route>
                   </Route>
               </Route>

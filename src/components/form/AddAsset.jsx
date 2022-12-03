@@ -22,7 +22,6 @@ import {
     Center
 } from "@chakra-ui/react";
 
-import CoOwnNFTContract from "./../../App"
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -31,7 +30,7 @@ import assetLogo from "../../assets/assetLogo.png"
 
 
 
-const AddAsset = () => {
+const AddAsset = ({Contract}) => {
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [sliderValue, setSliderValue] = React.useState(0)
     const [showTooltip, setShowTooltip] = React.useState(false)
@@ -42,7 +41,7 @@ const AddAsset = () => {
     let initValues = {
         name: "",
         type: null,
-        count: "",
+        count: null,
         ownershipDocument: null,
         assetImage: null,
         assetDescription: ""
@@ -54,7 +53,7 @@ const AddAsset = () => {
         .shape({
             name: yup.string().required(`Asset Name is required`),
             type: yup.object().required(`Asset Type is required`).nullable(),
-            count: yup.string().required(`Please specify the asset count`),
+            count: yup.number().required(`Please specify the asset count`),
             ownershipDocument: yup.array().required(`Please select the ownership document.`).nullable(),
             assetImage: yup.array().required(`Please select an Asset Image.`).nullable(),
             assetDescription: yup.string().required('Please enter some additional asset description.')
@@ -77,8 +76,10 @@ const AddAsset = () => {
         
         console.log(values)
         console.log(values)
-        const {cidDocument, nameDocument} = await storeFiles(values.ownershipDocument)
-        const res = await CoOwnNFTContract.methods.addProperty().call()
+        const document = await storeFiles(values.ownershipDocument)
+        const symbol = await storeFiles(values.assetImage)
+        const res = await Contract.methods.addProperty(values.name, symbol.cid, document.cid, 1633, values.count).call()
+        console.log(res)
         setSubmitSuccess(true)
     };
 
