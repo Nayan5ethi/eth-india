@@ -11,6 +11,7 @@ import PropertyListing from './components/property/PropertyListing';
 import { ChakraProvider } from '@chakra-ui/react';
 import PropertyDetails from './components/property/PropertyDetails';
 import AddAsset from './components/form/AddAsset';
+import TransferForm from './components/form/TranferOwnership';
 function App() {  
   const [selectedAccount,setSelectedAccount]=useState("");
   const [isInitialized,setIsInitialized]=useState(false);
@@ -53,8 +54,10 @@ function App() {
               <Route path="/" element={<AuthenticatedRoute/> } > 
                   <Route exact path='/' element={<Dashboard/>}> 
                     <Route index element={<PropertyListing />} />
-                    <Route path='listing'  element={<PropertyListing/>} ></Route>
-
+                    <Route path='listing'  element={<PropertyListing/>} >
+                      <Route path='transfer'  element={<TransferForm/>} ></Route>
+                    </Route>
+                    <Route path='transfer'  element={<TransferForm/>} ></Route>
                     <Route path='propertydetails'  element={<PropertyDetails/>} ></Route>
                     <Route path='add' element={<AddAsset/>} ></Route>
                     <Route path='rentals'  element={<PropertyListing/>} ></Route>
