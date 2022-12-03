@@ -13,24 +13,26 @@ export default function PropertyListing({ Contract }){
     const { selectedAccount } = useContext(UserWalletContext);
     const [loading,setLoading]=useState(false);
     const [data,setData]=useState(null);
+    console.log(Contract)
     const navigate=useNavigate();
     async function getProperties()
     {
         try{
+
             setLoading(true);
             const tokenIds = await Contract.methods.totalPropertiesListed(selectedAccount).call();
             let dataTemp = [];
             tokenIds.map((tokenIds,idx) => {
                 Contract.methods.tokenURI(tokenIds).call().then((url) => {
-
                     fetch(url)
                         .then(res => res.json())
-                        .then(out => { dataTemp.push(out); setData(dataTemp);  if (idx == tokenIds.length-1){setLoading(false)} })
-                })
+                        .then(out => { out.tokenId = tokenIds; dataTemp.push(out); setData(dataTemp);  if (idx == tokenIds.length-1){setLoading(false)} })
+                }) 
                 .catch(err => { throw err });
             })
         }
-        catch{
+        catch(err){
+            console.log(err);
             setLoading(false);
         }
         
