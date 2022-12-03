@@ -12,7 +12,6 @@ import PropertyListing from './components/property/PropertyListing';
 import { ChakraProvider } from '@chakra-ui/react';
 import PropertyDetails from './components/property/PropertyDetails';
 import AddAsset from './components/form/AddAsset';
-import CoOwnAbi from "./CoOwnNFT.json";
 import TransferForm from './components/form/TranferOwnership';
 import {Typography} from "@mui/material" 
 import Logo from "./assets/logo.png"
