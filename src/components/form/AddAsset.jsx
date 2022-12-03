@@ -36,7 +36,8 @@ const AddAsset = () => {
         name: "",
         type: null,
         count: "",
-        ownershipDocument: null
+        ownershipDocument: null,
+        assetImage: null
     };
 
 
@@ -46,7 +47,8 @@ const AddAsset = () => {
             name: yup.string().required(`Asset Name is required`),
             type: yup.object().required(`Asset Type is required`).nullable(),
             count: yup.string().required(`Please specify the asset count`),
-            ownershipDocument: yup.array().required(`Please select the ownership document`).nullable()
+            ownershipDocument: yup.array().required(`Please select the ownership document`).nullable(),
+            assetImage: yup.array().required(`Please select an Asset Image`).nullable()
         })
         .required();
 
@@ -232,6 +234,34 @@ const AddAsset = () => {
                                         {errors && errors.ownershipDocument && (
                                             <FormHelperText color="red">
                                                 {errors.ownershipDocument.message && errors.ownershipDocument.message}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
+                                )}
+                            />
+
+                            <Controller
+                                control={control}
+                                name="assetImage"
+                                rules={{ required: "Please select an Asset Image" }}
+                                render={({
+                                    field: { onChange, onBlur, value, name, ref },
+                                    fieldState: { error }
+                                }) => (
+                                    <FormControl>
+                                        <FormLabel htmlFor="assetImage">Asset Image</FormLabel>
+                                        <FilePicker
+                                            // ref = {register("assetImage")}
+                                            onFileChange={onChange}
+                                            placeholder="File"
+                                            clearButtonLabel="clear"
+                                            multipleFiles={true}
+                                            hideClearButton={false}
+                                            id="assetImage"
+                                        />
+                                        {errors && errors.assetImage && (
+                                            <FormHelperText color="red">
+                                                {errors.assetImage.message && errors.assetImage.message}
                                             </FormHelperText>
                                         )}
                                     </FormControl>
