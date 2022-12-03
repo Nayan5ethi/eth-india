@@ -8,7 +8,6 @@ const navigate=useNavigate();
 
     return(
 
-
         <>
         <Box   m="5" bgcolor="red" display={"flex"} flexDirection="column" justifyContent={"center"} alignItems="center">
             <Flex m="5" boxShadow={"base"} alignItems="center" backgroundColor="white" rounded="xl" p="5" justifyContent={"space-between"} w={["100%","60%"]}>
