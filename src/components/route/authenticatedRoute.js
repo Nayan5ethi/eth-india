@@ -8,7 +8,7 @@ export const AuthenticatedRoute =  ({ children })  => {
     const { selectedAccount } = useContext(UserWalletContext);
     if(selectedAccount==="" || selectedAccount===null || typeof selectedAccount==="undefined")
     {
-        return <Navigate to="/sdasa" />
+        return <Navigate to="/" />
     } 
     return <Outlet /> ;
 }
