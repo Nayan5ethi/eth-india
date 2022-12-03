@@ -8,15 +8,14 @@ const navigate=useNavigate();
 
     return(
 
-
         <>
         <Box   m="5" bgcolor="red" display={"flex"} flexDirection="column" justifyContent={"center"} alignItems="center">
-            <Flex m="5" boxShadow={"base"} alignItems="center" backgroundColor="white" rounded="xl" p="5" justifyContent={"space-between"} w={["100%","76%"]}>
-            <Typography variant="h4" sx={{m:2}}>My Properties</Typography>
+            <Flex m="5" boxShadow={"base"} alignItems="center" backgroundColor="white" rounded="xl" p="5" justifyContent={"space-between"} w={["100%","60%"]}>
+            <Heading>My Assets</Heading>
                 <Button onClick={()=>{
                     navigate("add")
                 }} colorScheme={"blue"}>
-                    Add property
+                    Add assets
                 </Button>
             
             </Flex>
