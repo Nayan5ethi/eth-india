@@ -86,8 +86,7 @@ const AddAsset = ({Contract}) => {
        try{
             setLoading(true)
             console.log(values)
-            console.log(values)
-            
+            console.log(Contract)
             const document = await storeFiles(values.ownershipDocument)
             const symbol = await storeFiles(values.assetImage)
             console.log(values.name, symbol.cid, document.cid, 1633, values.count)
@@ -387,19 +386,17 @@ const AddAsset = ({Contract}) => {
 
         <Flex pb="4" justifyContent={"space-evenly"} alignItems="center" w={"100%"}>
             <Button
-                
                 as={Link}
                 to="/"
                 size='sm' leftIcon={<GridViewIcon />} colorScheme='blue' variant='solid'>
                 Return to Dashboard
             </Button>
             <Button 
-            onClick={setAlert(false)}
-            size='sm' 
-            as={Link}
-            to="/add"
-
-            leftIcon={<AddIcon />} colorScheme={response==="success"?"blue":"red"} variant='solid'>
+                onClick={setAlert(false)}
+                size='sm' 
+                as={Link}
+                to="/add"
+                leftIcon={<AddIcon />} colorScheme={response==="success"?"blue":"red"} variant='solid'>
                 {response==="success"?"Add more assets":"Try again"}
             </Button>
         </Flex>

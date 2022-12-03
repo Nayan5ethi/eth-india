@@ -136,7 +136,7 @@ function App() {
                     <Route path='listing'  element={<PropertyListing/>} />
                     <Route path='transfer/:id'  element={<TransferForm/>} />
                     <Route path='propertydetails'  element={<PropertyDetails/>} />
-                    <Route path='add' element={<AddAsset/>} />
+                    <Route path='add' element={<AddAsset Contract={CoOwnNFTContract}/>} />
                   </Route>
               </Route>
             </Routes> 
