@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Select as ReactSelect } from "chakra-react-select";
 import FilePicker from "chakra-ui-file-picker";
 import {
@@ -23,7 +23,8 @@ import {
     Alert,
     AlertIcon,
     AlertTitle,
-    AlertDescription
+    InputGroup,
+    InputLeftAddon,
 } from "@chakra-ui/react";
 
 import GridViewIcon from '@mui/icons-material/GridView';
@@ -54,7 +55,8 @@ const AddAsset = ({Contract}) => {
         count: null,
         ownershipDocument: null,
         assetImage: null,
-        assetDescription: ""
+        assetDescription: "",
+        price: undefined
     };
 
 
@@ -63,10 +65,11 @@ const AddAsset = ({Contract}) => {
         .shape({
             name: yup.string().required(`Asset Name is required`),
             type: yup.object().required(`Asset Type is required`).nullable(),
-            count: yup.number().required(`Please specify the asset count`),
-            ownershipDocument: yup.array().required(`Please select the ownership document.`).nullable(),
-            assetImage: yup.array().required(`Please select an Asset Image.`).nullable(),
-            assetDescription: yup.string().required('Please enter some additional asset description.')
+            count: yup.number().required(`Please specify the Asset fragments`),
+            ownershipDocument: yup.array().required(`Please add the Ownership document.`).nullable(),
+            assetImage: yup.array().required(`Please add an Asset image.`).nullable(),
+            assetDescription: yup.string().required('Please enter description.'),
+            price: yup.number().typeError("Please provide price.").required("Please provide price.")
         })
         .required();
 
@@ -83,15 +86,18 @@ const AddAsset = ({Contract}) => {
     });
 
     const onSubmit = async (values) => {
-       try{
-            setLoading(true)
-            console.log(values)
-            console.log(Contract)
+        setLoading(true)
+
+        try{
             const document = await storeFiles(values.ownershipDocument)
-            const symbol = await storeFiles(values.assetImage)
-            console.log(values.name, symbol.cid, document.cid, 1633, values.count)
-            console.log(selectedAccount)
-            const res = await Contract.methods.addProperty(values.name, symbol.cid, document.cid, 10020202, values.count).send({ from: selectedAccount });
+            const assetImg = await storeFiles(values.assetImage)
+            const metadata = {name: values.name, type:values.type.value, fragments: values.count, ownershipDocument:`https://w3s.link/ipfs/${document.cid}/${document.name}`, assetImage:`https://w3s.link/ipfs/${assetImg.cid}/${assetImg.name}` , assetDescription:values.assetDescription}
+            const blob = new Blob([JSON.stringify(metadata)], { type: 'application/json' })
+            const files = [
+                new File([blob], '0.json')
+            ]
+            const metadataURI = await storeFiles(files)
+            const res = await Contract.methods.addProperty(values.name, "CoOwn", `https://w3s.link/ipfs/${metadataURI.cid}/${metadataURI.name}`, values.count, (values.price/values.count)*100).send({ from: selectedAccount });
             console.log(res)
             setSubmitSuccess(true)
             setResponse("success")
@@ -101,11 +107,8 @@ const AddAsset = ({Contract}) => {
             console.log("returns errrorr yessssssssssssss")
             setResponse("error")
         }
-        finally{
-            console.log("finally block running")
-            setLoading(false);
-            setAlert(true)
-        }
+        setLoading(false);
+        setAlert(true)
     };
 
     const onError = (error) => {
@@ -118,7 +121,7 @@ const AddAsset = ({Contract}) => {
         <>
          <Loader isVisible={loading}/>
         { !alert && 
-        <Container maxW={'full'} p="8">
+        <Container maxW={'full'} p="8" formSize={"18px"}>
             <Box rounded="lg" display="flex" flexDir={["row"]} wrap={"nowrap"} w="100%" justifyContent="space-between" boxShadow="base" p="10">
                 <Heading>Please fill in Asset Details</Heading>
                 <Center><Img 
@@ -282,7 +285,7 @@ const AddAsset = ({Contract}) => {
                                     id='count'
                                     defaultValue={0}
                                     min={0}
-                                    max={100}
+                                    max={10}
                                     colorScheme='blue'
                                     onChange={(v) => {
                                         onChange(v)
@@ -294,17 +297,11 @@ const AddAsset = ({Contract}) => {
                                     <SliderMark value={0} mt='1' ml='-2.5' fontSize='sm'>
                                         0
                                     </SliderMark>
-                                    <SliderMark value={25} mt='1' ml='-2.5' fontSize='sm'>
-                                        25
+                                    <SliderMark value={5} mt='1' ml='-2.5' fontSize='sm'>
+                                        5
                                     </SliderMark>
-                                    <SliderMark value={50} mt='1' ml='-2.5' fontSize='sm'>
-                                        50
-                                    </SliderMark>
-                                    <SliderMark value={75} mt='1' ml='-2.5' fontSize='sm'>
-                                        75
-                                    </SliderMark>
-                                    <SliderMark value={100} mt='1' ml='-2.5' fontSize='sm'>
-                                        100
+                                    <SliderMark value={10} mt='1' ml='-2.5' fontSize='sm'>
+                                        10
                                     </SliderMark>
                                     <SliderTrack>
                                         <SliderFilledTrack />
@@ -328,6 +325,22 @@ const AddAsset = ({Contract}) => {
                             </FormControl>
                             )}
                             />
+
+                            <FormControl>
+                                <FormLabel fontWeight={"medium"} fontSize={"1.3rem"} htmlFor="name">Price</FormLabel>
+
+                                <InputGroup size='sm'>
+                                    <InputLeftAddon children='ETH' />
+                                    <Input id="price" type="number" {...register("price")} placeholder="Price" />
+                                </InputGroup>
+
+                                {/* <Input id="price" type="number" {...register("price")} placeholder="Price" /> */}
+                                {errors && errors.price && (
+                                    <FormHelperText color="red">
+                                        {errors.price.message && errors.price.message}
+                                    </FormHelperText>
+                                )}
+                            </FormControl>
                         </Flex>
 
                         <Flex
@@ -385,8 +398,9 @@ const AddAsset = ({Contract}) => {
                 size='sm' leftIcon={<GridViewIcon />} colorScheme='blue' variant='solid'>
                 Return to Dashboard
             </Button>
-            <Button 
-                onClick={setAlert(false)}
+            <Button onClick={()=>{
+                setAlert(false)
+            }}
                 size='sm' 
                 as={Link}
                 to="/add"
