@@ -1,27 +1,30 @@
 import { Center, useEditable ,Flex, useFormControlStyles} from "@chakra-ui/react";
-import {Button,Paper} from "@mui/material";
+import {Button, Paper} from "@mui/material";
 import TextField from '@mui/material/TextField';
 import { Box } from "@chakra-ui/react";
 import { Card } from "@chakra-ui/react"; 
-import {useEffect, useState} from "react";   
+import {useEffect, useState, useContext} from "react";   
 import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import { Colors } from 'chart.js';
 import { Pie, } from 'react-chartjs-2';     
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
  import { Typography } from "@mui/material";
+ import { UserWalletContext } from "../../context/userWalletContext";
 
 
-const TransferOwnership=()=>{
+const TransferOwnership=({Contract})=>{
+    const id = 4;
     const [maxTokens,setMaxTokens]=useState(4);
     ChartJS.register(ArcElement, Tooltip, Legend, Colors);
-
+    
+    const { selectedAccount } = useContext(UserWalletContext);
     const [data,setData]=useState([]);
     const [labels,setLabels]=useState([]);
     const [formFields, setFormFields] = useState([
         { receiverAddress: '', tokens: '' },
     ])
-
+    const [myTok,setMyTok]=useState();
     const handleFormChange = (event, index,x) => {
         let data = [...formFields];
         data[index][x] = event.target.value;
@@ -36,14 +39,26 @@ const TransferOwnership=()=>{
         })
         label.push("My tokens");
         token.push(maxTokens-s);
+        setMyTok(maxTokens-s);
 
         setLabels(label)
         setData(token)
     }
    
-    const submit = (e) => {
-        e.preventDefault();
-        console.log(formFields)
+    const submit = async (e) => {
+        if(myTok<0)
+        {
+            e.preventDefault();
+            let walletAddress = formFields.map(({ receiverAddress }) => receiverAddress)
+            let tokens = formFields.map(({ tokens }) => tokens)
+            console.log(walletAddress, tokens)
+            const res = await Contract.methods.transferFractionInBatch(id, walletAddress, tokens).send({ from: selectedAccount });
+            console.log(res)
+        }
+        else{
+            
+        }
+        
     }
 
     const addFields = () => {
@@ -83,6 +98,8 @@ const TransferOwnership=()=>{
         })
         label.push("My tokens");
         token.push(maxTokens - s);
+        setMyTok(maxTokens-s);
+
         console.log(label)
         console.log(token   )
         setLabels(label);
