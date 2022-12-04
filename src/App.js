@@ -1,5 +1,5 @@
 import React from 'react'; 
-import { useState,useContext,useEffect } from 'react';
+import { useState, useContext, useEffect} from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Button from '@mui/material/Button';
@@ -7,7 +7,7 @@ import Web3 from 'web3';
 import { UserWalletContext } from "./context/userWalletContext";
 import { AuthenticatedRoute } from "./components/route/authenticatedRoute";
 import Dashboard from './components/dashboard/Dashboard';
-import { BrowserRouter, Route, Routes,Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Switch} from 'react-router-dom';
 import PropertyListing from './components/property/PropertyListing';
 import { ChakraProvider } from '@chakra-ui/react';
 import PropertyDetails from './components/property/PropertyDetails';

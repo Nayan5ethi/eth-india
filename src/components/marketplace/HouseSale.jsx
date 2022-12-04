@@ -3,8 +3,12 @@ import { Box, Button,Flex, Heading } from "@chakra-ui/react";
 import Property from "../property/Property";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
+import { useEffect } from "react";
 
 export default function HouseSale(){
+useEffect(()=>{
+    
+},[])
 const navigate=useNavigate();
 
     return(
