@@ -134,7 +134,6 @@ function App() {
             <Routes> 
               <Route path="/" element={<AuthenticatedRoute/> } > 
                   <Route exact path='/' element={<Dashboard/>}> 
-                    <Route index element={<PropertyListing  />} />
                     <Route path='rentals'  element={<PropertyListing />} />
                     <Route path='sale'  element={<HouseSale sale={true}/>} />
                     <Route path='sale/:id'  element={<SaleDetails/>} ></Route>
@@ -144,7 +143,7 @@ function App() {
                     <Route path='propertydetails'  element={<PropertyDetails/>} />
                     <Route path='add' element={<AddAsset Contract={CoOwnNFTContract}/>} />
                   </Route>
-              </Route>
+              </Route> 
             </Routes> 
           </BrowserRouter>
           </ChakraProvider>

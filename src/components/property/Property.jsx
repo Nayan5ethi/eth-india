@@ -41,4 +41,4 @@ export default function Property({name,desc,imgUrl,type,price,sale }){
         </CardFooter>
 }
       </Card>
-          )}
+)}

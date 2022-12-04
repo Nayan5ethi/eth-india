@@ -1,6 +1,6 @@
 
 import { Box, Button,Flex, Heading } from "@chakra-ui/react";
-import Property from "./Property";
+import Property2 from "./Property2";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { useEffect,useContext,useState } from "react";
@@ -17,20 +17,26 @@ export default function PropertyListing({ Contract }){
     async function getProperties()
     {
         try{
+
             setLoading(true);
             const tokenIds = await Contract.methods.totalPropertiesListed(selectedAccount).call();
             let dataTemp = [];
+            console.log(tokenIds);
+            if(tokenIds.length<=0)
+            {
+                setLoading(false);
+            }
             tokenIds.map((tokenIds,idx) => {
                 Contract.methods.tokenURI(tokenIds).call().then((url) => {
-
                     fetch(url)
                         .then(res => res.json())
-                        .then(out => { dataTemp.push(out); setData(dataTemp);  if (idx == tokenIds.length-1){setLoading(false)} })
-                })
+                        .then(out => { out.tokenId = tokenIds; dataTemp.push(out); setData(dataTemp);  if (idx == tokenIds.length-1){setLoading(false)} })
+                }) 
                 .catch(err => { throw err });
             })
         }
-        catch{
+        catch(err){
+            console.log(err);
             setLoading(false);
         }
         
@@ -56,7 +62,7 @@ export default function PropertyListing({ Contract }){
             {
                 data?
                 <Flex flexDirection={["column","row"]} flexWrap="wrap" justifyContent={"center"} alignItems="center">
-                    {data.map((ele) => <Property name={ele.name} desc={ele.assetDescription} imgUrl={ele.assetImage} type={ele.type} sale={false}/>)}
+                    {data.map((ele) => <Property2 name={ele.name} desc={ele.assetDescription} imgUrl={ele.assetImage} type={ele.type} id={ele.tokenId} ownershipDocument={ele.ownershipDocument} fragments={ele.fragments}/>)}
                 </Flex>:""
             }
         </Box>
