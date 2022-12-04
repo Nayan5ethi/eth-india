@@ -11,11 +11,12 @@ import { Pie, } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
  import { Typography } from "@mui/material";
  import { UserWalletContext } from "../../context/userWalletContext";
-
+import { useParams } from "react-router-dom";
 
 const TransferOwnership=({Contract})=>{
-    const id = 4;
-    const [maxTokens,setMaxTokens]=useState(4);
+    const { id,fragments } = useParams();
+
+    const [maxTokens,setMaxTokens]=useState(fragments);
     ChartJS.register(ArcElement, Tooltip, Legend, Colors);
     
     const { selectedAccount } = useContext(UserWalletContext);
