@@ -19,7 +19,9 @@ export default function PropertyListing({ Contract }){
         try{
 
             setLoading(true);
-            const tokenIds = await Contract.methods.totalPropertiesListed(selectedAccount).call();
+            let tokenIds = await Contract.methods.totalPropertiesOwned(selectedAccount).call();
+            let tokenIdss = await Contract.methods.totalPropertiesListed(selectedAccount).call();
+            tokenIds=[...tokenIdss, ...tokenIds]
             let dataTemp = [];
             console.log(tokenIds);
             if(tokenIds.length<=0)

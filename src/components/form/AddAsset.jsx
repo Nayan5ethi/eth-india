@@ -98,6 +98,7 @@ const AddAsset = ({Contract}) => {
                 new File([blob], '0.json')
             ]
             const metadataURI = await storeFiles(files)
+            console.log(values.name, "CoOwn", `https://w3s.link/ipfs/${metadataURI.cid}/${metadataURI.name}`, values.count, (values.price/values.count)*100)
             const res = await Contract.methods.addProperty(values.name, "CoOwn", `https://w3s.link/ipfs/${metadataURI.cid}/${metadataURI.name}`, values.count, (values.price/values.count)*100).send({ from: selectedAccount });
             console.log(res)
             setSubmitSuccess(true)
@@ -426,7 +427,6 @@ const AddAsset = ({Contract}) => {
             <AlertTitle mt={4} mb={1} fontSize='lg'>
             {response==="success"?"Successfully Submitted":"Failed to Add Asset. Please try again."}
             </AlertTitle>
-    
         </Alert>
     </Flex>
 }   
