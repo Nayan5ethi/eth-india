@@ -27,12 +27,14 @@ export default function PropertyListing({ Contract }){
                 setLoading(false);
             }
             tokenIds.map((tokenIds,idx) => {
+                Contract.methods.Properties(tokenIds).call().then((x)=>{
                 Contract.methods.tokenURI(tokenIds).call().then((url) => {
                     fetch(url)
                         .then(res => res.json())
-                        .then(out => { out.tokenId = tokenIds; dataTemp.push(out); setData(dataTemp);  if (idx == tokenIds.length-1){setLoading(false)} })
+                        .then(out => {out.flag=x.propertySold; out.tokenId = tokenIds; dataTemp.push(out); setData(dataTemp);  if (idx == tokenIds.length-1){setLoading(false)} })
                 }) 
                 .catch(err => { throw err });
+            })
             })
         }
         catch(err){
@@ -62,7 +64,7 @@ export default function PropertyListing({ Contract }){
             {
                 data?
                 <Flex flexDirection={["column","row"]} flexWrap="wrap" justifyContent={"center"} alignItems="center">
-                    {data.map((ele) => <Property2 name={ele.name} desc={ele.assetDescription} imgUrl={ele.assetImage} type={ele.type} id={ele.tokenId} ownershipDocument={ele.ownershipDocument} fragments={ele.fragments}/>)}
+                    {data.map((ele) => <Property2 name={ele.name} desc={ele.assetDescription} imgUrl={ele.assetImage} type={ele.type} id={ele.tokenId} ownershipDocument={ele.ownershipDocument} fragments={ele.fragments} flag={ele.flag}/>)}
                 </Flex>:""
             }
         </Box>

@@ -1,10 +1,11 @@
 import { Button, ButtonGroup, Card, CardBody, CardFooter, Divider, Heading, Image, Link, Stack, Text, Flex } from "@chakra-ui/react";
 import Chip from '@mui/material/Chip';
 import { useNavigate } from "react-router-dom";
-export default function Property({ name, desc, imgUrl, type, id, ownershipDocument, fragments }) {
+export default function Property({ name, desc, imgUrl, type, id, ownershipDocument, fragments,flag }) {
     const navigate = useNavigate();
+    console.log(flag)
     return (
-        <Card
+        !flag && <Card
             _hover={{
                 border: "1px solid black",
                 cursor: "pointer",
@@ -36,7 +37,6 @@ export default function Property({ name, desc, imgUrl, type, id, ownershipDocume
                     </Button>
                 </ButtonGroup>
             </CardFooter>
-
         </Card>
     )
 }

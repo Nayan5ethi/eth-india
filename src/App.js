@@ -89,7 +89,7 @@ function App() {
 
   const CoOwnNFTContract = new web3.eth.Contract(
 		CoOwnAbi,
-		'0xA4cb659BC437cEea71234C5d0B8e6679A259B14d'
+		'0xA0861320d909B35653bff969eBe50c3692CdE066'
 	);
 
   
