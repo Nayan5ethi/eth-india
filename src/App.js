@@ -89,7 +89,7 @@ function App() {
 
   const CoOwnNFTContract = new web3.eth.Contract(
 		CoOwnAbi,
-		'0x27B3549BC1d238dAeFC6FF922fCEEb7C7E130713'
+		'0xA4cb659BC437cEea71234C5d0B8e6679A259B14d'
 	);
 
   
@@ -139,7 +139,7 @@ function App() {
                     <Route path='sale/:id'  element={<SaleDetails/>} ></Route>
                     <Route index element={<PropertyListing Contract={CoOwnNFTContract} />} />
                     <Route path='listing'  element={<PropertyListing Contract={CoOwnNFTContract}/>} />
-                    <Route path='transfer/:id/:fragments'  element={<TransferForm/>} />
+                    <Route path='transfer/:id/:fragments'  element={<TransferForm Contract={CoOwnNFTContract}/>} />
                     <Route path='propertydetails'  element={<PropertyDetails/>} />
                     <Route path='add' element={<AddAsset Contract={CoOwnNFTContract}/>} />
                   </Route>

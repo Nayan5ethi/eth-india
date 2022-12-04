@@ -47,13 +47,13 @@ const TransferOwnership=({Contract})=>{
     }
    
     const submit = async (e) => {
-        if(myTok<0)
+        if(myTok>=0)
         {
             e.preventDefault();
             let walletAddress = formFields.map(({ receiverAddress }) => receiverAddress)
             let tokens = formFields.map(({ tokens }) => tokens)
             console.log(walletAddress, tokens)
-            const res = await Contract.methods.transferFractionInBatch(id, walletAddress, tokens).send({ from: selectedAccount });
+            const res = await Contract.methods.transferFractionsInBatch(id, walletAddress, tokens).send({ from: selectedAccount });
             console.log(res)
         }
         else{

@@ -472,24 +472,6 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_to",
-        "type": "address"
-      },
-      {
-        "internalType": "string",
-        "name": "_message",
-        "type": "string"
-      }
-    ],
-    "name": "sendinNotification",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
         "name": "operator",
         "type": "address"
       },

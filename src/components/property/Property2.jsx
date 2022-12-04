@@ -28,7 +28,7 @@ export default function Property({ name, desc, imgUrl, type, id, ownershipDocume
             <Divider/>
             <CardFooter>
                 <ButtonGroup spacing='2'>
-                    <Button variant='solid' colorScheme='blue' onClick={() => { navigate(`/${id}/${fragments}`)}}>
+                    <Button variant='solid' colorScheme='blue' onClick={() => { navigate(`/transfer/${id}/${fragments}`)}}>
                         Transfer Stakes
                     </Button>
                     <Button variant='ghost' colorScheme='blue' onClick={() => { window.open(ownershipDocument); }} >
