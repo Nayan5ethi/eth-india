@@ -22,7 +22,10 @@ export default function PropertyListing({ Contract }){
             const tokenIds = await Contract.methods.totalPropertiesListed(selectedAccount).call();
             let dataTemp = [];
             console.log(tokenIds);
-            if(tokenIds)
+            if(tokenIds.length<=0)
+            {
+                setLoading(false);
+            }
             tokenIds.map((tokenIds,idx) => {
                 Contract.methods.tokenURI(tokenIds).call().then((url) => {
                     fetch(url)
