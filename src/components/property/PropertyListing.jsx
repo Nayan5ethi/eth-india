@@ -1,6 +1,6 @@
 
 import { Box, Button,Flex, Heading } from "@chakra-ui/react";
-import Property from "./Property";
+import Property2 from "./Property2";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { useEffect,useContext,useState } from "react";
@@ -13,7 +13,6 @@ export default function PropertyListing({ Contract }){
     const { selectedAccount } = useContext(UserWalletContext);
     const [loading,setLoading]=useState(false);
     const [data,setData]=useState(null);
-    console.log(Contract)
     const navigate=useNavigate();
     async function getProperties()
     {
@@ -22,6 +21,8 @@ export default function PropertyListing({ Contract }){
             setLoading(true);
             const tokenIds = await Contract.methods.totalPropertiesListed(selectedAccount).call();
             let dataTemp = [];
+            console.log(tokenIds);
+            if(tokenIds)
             tokenIds.map((tokenIds,idx) => {
                 Contract.methods.tokenURI(tokenIds).call().then((url) => {
                     fetch(url)
@@ -58,7 +59,7 @@ export default function PropertyListing({ Contract }){
             {
                 data?
                 <Flex flexDirection={["column","row"]} flexWrap="wrap" justifyContent={"center"} alignItems="center">
-                    {data.map((ele) => <Property name={ele.name} desc={ele.assetDescription} imgUrl={ele.assetImage} type={ele.type} sale={false}/>)}
+                    {data.map((ele) => <Property2 name={ele.name} desc={ele.assetDescription} imgUrl={ele.assetImage} type={ele.type} id={ele.tokenId} ownershipDocument={ele.ownershipDocument} fragments={ele.fragments}/>)}
                 </Flex>:""
             }
         </Box>
